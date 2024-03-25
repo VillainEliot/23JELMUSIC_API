@@ -1,0 +1,143 @@
+controllers:
+    resource: ../src/Controller/
+    type: attribute
+
+acceuilConsulter:
+    path: /
+    controller: \App\Controller\AcceuilController::index
+
+connexion:
+    path: /connexion
+    controller: \App\Controller\SecurityController::login
+
+inscription:
+    path: /inscription
+    controller: \App\Controller\RegistrationController::register
+
+deconnexion:
+    path: /logout
+    controller: \App\Controller\SecurityController::logout
+
+instrumentConsulter:
+    path: /instrument/consulter/{id}
+    controller: \App\Controller\InstrumentController::consulterInstrument
+
+instrumentLister:
+    path: /instrument/lister
+    controller: App\Controller\InstrumentController::listerInstrument
+
+instrumentAjouter:
+    path: /instrument/ajouter
+    controller: App\Controller\InstrumentController::ajouterInstrument
+
+InstrumentModifier:
+    path: /instrument/modifier/{id}
+    controller: App\Controller\InstrumentController::modifierInstrument
+
+InstrumentSupprimer:
+    path: /instrument/supprimer
+    controller: App\Controller\InstrumentController::supprimerInstrument
+
+app_cours:
+    path: /cours
+    controller: App\Controller\CoursController::index
+
+coursConsulter:
+    path: /cours/consulter/{id}
+    controller: App\Controller\CoursController::consulterCours
+
+coursLister:
+    path: /cours/lister
+    controller: App\Controller\CoursController::listerCours
+
+coursAjouter:
+    path: /cours/ajouter
+    controller: App\Controller\CoursController::ajouterCours
+
+coursModifier:
+    path: /cours/modifier/{id}
+    controller: App\Controller\CoursController::modifierCours
+
+ContratPretlister:
+    path: /contratPret/lister
+    controller: App\Controller\ContratPretController::listerContratPret
+
+ContratPretConsulter:
+    path: /contratPret/consulter/{id}
+    controller: App\Controller\ContratPretController::consulterContratPret
+
+ContratPretAjouter:
+    path: /contratPret/ajouter
+    controller: App\Controller\ContratPretController::ajouterContratPret
+
+ContratPretModifier:
+    path: /contratPret/modifier/{id}
+    controller: App\Controller\ContratPretController::modifierContratPret
+
+Interventionlister:
+    path: /intervention/lister
+    controller: App\Controller\InterventionController::listerIntervention
+
+InterventionConsulter:
+    path: /intervention/consulter/{id}
+    controller: App\Controller\InterventionController::consulterIntervention
+
+InterventionAjouter:
+    path: /intervention/ajouter/{instrumentId}
+    controller: App\Controller\InterventionController::ajouterIntervention
+
+InterventionModifier:
+    path: /intervention/modifier/{id}
+    controller: App\Controller\InterventionController::modifierIntervention
+
+rgpdConsulter:
+    path: /rgpd
+    controller: \App\Controller\EgpdController::index
+
+ProfessionnelLister:
+    path: /professionnel/lister
+    controller: App\Controller\ProfessionnelController::listerProfessionnel
+
+ProfessionnelConsulter :
+    path: /professionnel/consulter/{id}
+    controller: App\Controller\ProfessionnelController::consulterProfessionnel
+
+ProfessionnelAjouter :
+    path: /professionnel/ajouter
+    controller: App\Controller\ProfessionnelController::ajoutProfessionnel
+
+ProfessionnelModifier :
+    path: /professionnel/modifier/{id}
+    controller: App\Controller\ProfessionnelController::modifierProfessionnel
+
+eleveLister:
+    path: /eleve/lister
+    controller: App\Controller\EleveController::listerEleve
+
+eleveConsulter:
+    path: /eleve/consulter/{id}
+    controller: App\Controller\EleveController::consulterEleve
+
+eleveAjouter:
+    path: /eleve/ajouter
+    controller: App\Controller\EleveController::ajouterEleve
+
+eleveModifier:
+    path: /eleve/modifier/{id}
+    controller: App\Controller\EleveController::modifierEleve
+
+inscriptionLister:
+    path: /inscription/lister
+    controller: App\Controller\InscriptionController::listerInscription
+
+inscriptionConsulter:
+    path: /inscription/consulter/{id}
+    controller: App\Controller\InscriptionController::consulterInscription
+
+inscriptionAjouter:
+    path: /inscription/ajouter
+    controller: App\Controller\InscriptionController::ajouterInscription
+
+inscriptionModifier:
+    path: /inscription/modifier/{id}
+    controller: App\Controller\InscriptionController::modifierInscription
