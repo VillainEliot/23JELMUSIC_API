@@ -6,6 +6,7 @@ use App\Repository\JoursRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: JoursRepository::class)]
 class Jours
@@ -13,12 +14,15 @@ class Jours
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('api')]
     private ?int $id = null;
 
     #[ORM\Column(length: 200)]
+    #[Groups('api')]
     private ?string $libelle = null;
 
     #[ORM\OneToMany(mappedBy: 'jours', targetEntity: Cours::class)]
+    #[Groups('api')]
     private Collection $cours;
 
     public function __construct()

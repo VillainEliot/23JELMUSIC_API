@@ -6,6 +6,7 @@ use App\Repository\CouleurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CouleurRepository::class)]
 class Couleur
@@ -13,12 +14,15 @@ class Couleur
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('api')]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups('api')]
     private ?string $nom = null;
 
     #[ORM\ManyToMany(targetEntity: Instrument::class, mappedBy: 'Couleurs')]
+    #[Groups('api')]
     private Collection $instruments;
 
     public function __construct()

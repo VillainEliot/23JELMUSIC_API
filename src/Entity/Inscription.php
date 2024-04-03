@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\InscriptionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: InscriptionRepository::class)]
 class Inscription
@@ -12,15 +13,19 @@ class Inscription
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('api')]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups('api')]
     private ?\DateTimeInterface $dateInscription = null;
 
     #[ORM\ManyToOne(inversedBy: 'inscriptions')]
+    #[Groups('api')]
     private ?Cours $cours = null;
 
     #[ORM\ManyToOne(inversedBy: 'inscriptions')]
+    #[Groups('api')]
     private ?Eleve $eleve = null;
 
     public function getId(): ?int

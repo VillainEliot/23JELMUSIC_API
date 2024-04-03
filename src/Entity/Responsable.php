@@ -6,6 +6,7 @@ use App\Repository\ResponsableRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ResponsableRepository::class)]
 class Responsable
@@ -13,27 +14,35 @@ class Responsable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('api')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('api')]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('api')]
     private ?string $prenom = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups('api')]
     private ?int $numRue = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('api')]
     private ?string $rue = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups('api')]
     private ?int $tel = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('api')]
     private ?string $mail = null;
 
     #[ORM\ManyToMany(targetEntity: Eleve::class, mappedBy: 'responsables')]
+    #[Groups('api')]
     private Collection $eleves;
 
     public function __construct()

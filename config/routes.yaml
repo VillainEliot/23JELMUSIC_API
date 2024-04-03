@@ -35,7 +35,7 @@ InstrumentModifier:
     controller: App\Controller\InstrumentController::modifierInstrument
 
 InstrumentSupprimer:
-    path: /instrument/supprimer
+    path: /instrument/supprimer/{id}
     controller: App\Controller\InstrumentController::supprimerInstrument
 
 app_cours:
