@@ -111,7 +111,7 @@ class ContratPretController extends AbstractController
                 'eleve'=> $request->get('eleve'),
                 'instrument'=> $request->get('instrument'),
             ];
-            $contratPret = new contratPret();
+
             $dateDebut = new DateTimeImmutable($donnees['dateDebut']);
             $contratPret->setDateDebut($dateDebut);
             $dateFin = new DateTimeImmutable($donnees['dateFin']);
