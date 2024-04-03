@@ -50,22 +50,27 @@ app_cours:
 coursConsulter:
     path: /cours/consulter/{id}
     controller: App\Controller\CoursController::consulterCours
+    methods: GET
 
 coursLister:
     path: /cours/lister
     controller: App\Controller\CoursController::listerCours
+    methods: GET
 
 coursAjouter:
     path: /cours/ajouter
     controller: App\Controller\CoursController::ajouterCours
+    methods: PUT
 
 coursModifier:
     path: /cours/modifier/{id}
     controller: App\Controller\CoursController::modifierCours
+    methods: POST
 
 CoursSupprimer:
     path: /cours/supprimer/{id}
     controller: App\Controller\CoursController::supprimerCours
+    methods: DELETE
 
 ContratPretlister:
     path: /contratPret/lister
