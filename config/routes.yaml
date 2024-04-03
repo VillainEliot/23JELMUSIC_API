@@ -74,6 +74,10 @@ ContratPretModifier:
     path: /contratPret/modifier/{id}
     controller: App\Controller\ContratPretController::modifierContratPret
 
+ContratPretSupprimer:
+    path: /contratPret/supprimer/{id}
+    controller: App\Controller\ContratPretController::supprimerContratPret
+
 Interventionlister:
     path: /intervention/lister
     controller: App\Controller\InterventionController::listerIntervention
