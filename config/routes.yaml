@@ -58,6 +58,10 @@ coursModifier:
     path: /cours/modifier/{id}
     controller: App\Controller\CoursController::modifierCours
 
+CoursSupprimer:
+    path: /cours/supprimer/{id}
+    controller: App\Controller\CoursController::supprimerCours
+
 ContratPretlister:
     path: /contratPret/lister
     controller: App\Controller\ContratPretController::listerContratPret
