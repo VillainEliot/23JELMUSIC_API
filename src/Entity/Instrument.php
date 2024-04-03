@@ -62,7 +62,6 @@ class Instrument
     private ?string $nom = null;
 
     #[ORM\ManyToMany(targetEntity: Couleur::class, inversedBy: 'instruments')]
-    #[Groups('api')]
     private Collection $couleurs;
 
     #[ORM\OneToMany(mappedBy: 'instrument', targetEntity: ContratPret::class)]
