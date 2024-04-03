@@ -74,9 +74,7 @@ class CoursController extends AbstractController
         $cours= $doctrine->getRepository(Cours::class)->find($id);
 
         if (!$cours) {
-            throw $this->createNotFoundException(
-                'Aucun cours trouvé avec le numéro '.$id
-            );
+            return new JsonResponse(['error'=> true, 'message'=> 'Le cours ne peut pas être consulté puisqu\'il n\'existe pas.']);
         }
 
         $eleveInscrits = $cours->getInscriptions();
@@ -152,7 +150,7 @@ class CoursController extends AbstractController
         //$cours = $repository->findAll();
 
         if (!$cours) {
-            throw $this->createNotFoundException('Aucun cours trouvé avec le numéro '.$id);
+            return new JsonResponse(['error'=> true, 'message'=> 'Le cours ne peut pas être modifié puisqu\'il n\'existe pas.']);
         }else{
             // récupération des données
             $donnees = [
