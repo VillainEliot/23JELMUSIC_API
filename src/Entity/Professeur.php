@@ -6,6 +6,7 @@ use App\Repository\ProfesseurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProfesseurRepository::class)]
 class Professeur
@@ -13,33 +14,43 @@ class Professeur
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('api')]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups('api')]
     private ?string $nom = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups('api')]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 10)]
+    #[Groups('api')]
     private ?string $numRue = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups('api')]
     private ?string $rue = null;
 
     #[ORM\Column(length: 20)]
+    #[Groups('api')]
     private ?string $copos = null;
 
     #[ORM\Column(length: 30)]
+    #[Groups('api')]
     private ?string $ville = null;
 
     #[ORM\Column(length: 20)]
+    #[Groups('api')]
     private ?string $tel = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups('api')]
     private ?string $mail = null;
 
     #[ORM\OneToMany(mappedBy: 'professeur', targetEntity: Cours::class)]
+    #[Groups('api')]
     private Collection $cours;
 
     public function __construct()

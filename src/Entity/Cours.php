@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CoursRepository::class)]
@@ -15,10 +16,12 @@ class Cours
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('api')]
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
     #[Assert\Regex(pattern:"/^\d+$/", message:"Veuillez saisir uniquement des chiffres.")]
+    #[Groups('api')]
     #[Assert\Range(
         notInRangeMessage: "L'age ne doit pas être plus être plus petit que 3 ans et plus grand que 99 ans",
         min: 3,
@@ -28,6 +31,7 @@ class Cours
     private ?string $AgeMini = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Groups('api')]
     #[Assert\NotBlank()]
     #[Assert\Expression('this.getHeureDebut() < this.getHeureFin()',
         message:"L'heure de début ne peut pas être supérieure à l'heure de fin.")]
@@ -37,6 +41,7 @@ class Cours
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     #[Assert\NotBlank()]
+    #[Groups('api')]
     #[Assert\Expression('this.getHeureDebut() < this.getHeureFin()',
         message:"L'heure de fin ne peut pas être antérieure à l'heure de début.")]
     #[Assert\LessThan('07:00',
@@ -45,6 +50,7 @@ class Cours
 
     #[ORM\Column]
     #[Assert\Positive(message:"Le nombre de places doit être supérieur à zéro.")]
+    #[Groups('api')]
     #[Assert\Range(
         notInRangeMessage: "Le nombre de place ne peut pas être supérieur à 25 et inférieur à 1",
         min: 1,
@@ -52,6 +58,7 @@ class Cours
     private ?int $NbPlaces = null;
 
     #[ORM\Column(length: 20)]
+    #[Groups('api')]
     #[Assert\Regex(pattern:"/^\d+$/", message:"Veuillez saisir uniquement des chiffres.")]
     #[Assert\Range(
         notInRangeMessage: "L'age ne doit pas être plus être plus petit que 3 ans et plus grand que 99 ans",
@@ -62,18 +69,23 @@ class Cours
     private ?string $AgeMaxi = null;
 
     #[ORM\ManyToOne(inversedBy: 'cours')]
+    #[Groups('api')]
     private ?TypeCours $typeCours = null;
 
     #[ORM\ManyToOne(inversedBy: 'cours')]
+    #[Groups('api')]
     private ?Jours $jours = null;
 
     #[ORM\ManyToOne(inversedBy: 'cours')]
+    #[Groups('api')]
     private ?Professeur $professeur = null;
 
     #[ORM\OneToMany(mappedBy: 'cours', targetEntity: Inscription::class)]
+    #[Groups('api')]
     private Collection $inscriptions;
 
     #[ORM\ManyToOne(inversedBy: 'cours')]
+    #[Groups('api')]
     private ?TypeInstrument $typeInstruments = null;
 
     public function __construct()

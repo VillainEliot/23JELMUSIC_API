@@ -6,6 +6,7 @@ use App\Repository\ProfessionnelRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProfessionnelRepository::class)]
 class Professionnel
@@ -13,34 +14,44 @@ class Professionnel
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('api')]
     private ?int $id = null;
 
     #[ORM\Column(length: 150, nullable: true)]
+    #[Groups('api')]
     private ?string $nom = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups('api')]
     private ?int $numRue = null;
 
     #[ORM\Column(length: 150, nullable: true)]
+    #[Groups('api')]
     private ?string $rue = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups('api')]
     private ?int $copos = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('api')]
     private ?string $ville = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups('api')]
     private ?string $tel = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('api')]
     #[Assert\Email(message:"Veuillez saisir un mail valide")]
     private ?string $mail = null;
 
     #[ORM\OneToMany(mappedBy: 'professionnel', targetEntity: Intervention::class)]
+    #[Groups('api')]
     private Collection $interventions;
 
     #[ORM\ManyToMany(targetEntity: Metier::class, inversedBy: 'professionnels')]
+    #[Groups('api')]
     private Collection $metier;
 
     public function __construct()

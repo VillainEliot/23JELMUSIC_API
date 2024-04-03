@@ -6,6 +6,7 @@ use App\Repository\EleveRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EleveRepository::class)]
@@ -14,33 +15,41 @@ class Eleve
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('api')]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups('api')]
     #[Assert\Regex(pattern:"/^[a-zA-Z0-9 ]+$/", message:"Ce champ doit contenir que des lettres ou des chiffres.")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups('api')]
     #[Assert\Regex(pattern:"/^[a-zA-Z0-9 ]+$/", message:"Ce champ doit contenir que des lettres ou des chiffres.")]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 20)]
+    #[Groups('api')]
     #[Assert\Regex(pattern:"/^\d+$/", message:"Ce champ doit contenir que des chiffres.")]
     private ?string $numRue = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups('api')]
     #[Assert\Regex(pattern:"/^[a-zA-Z0-9 ]+$/", message:"Ce champ doit contenir que des lettres ou des chiffres.")]
     private ?string $rue = null;
 
     #[ORM\Column(length: 10)]
+    #[Groups('api')]
     #[Assert\Regex(pattern:"/^\d{5}$/", message:"Ce champ doit contenir que des chiffres.")]
     private ?string $copos = null;
 
     #[ORM\Column(length: 30)]
+    #[Groups('api')]
     #[Assert\Regex(pattern:"/^[a-zA-Z0-9 ]+$/", message:"Ce champ doit contenir que des lettres ou des chiffres.")]
     private ?string $ville = null;
 
     #[ORM\Column(length: 20)]
+    #[Groups('api')]
     #[Assert\Regex(pattern:"/^\d{10}$/", message:"Ce champ doit contenir que des chiffres.")]
 //    #[Assert\Range(
 //        notInRangeMessage: "Il faut que le numéro de téléphone soit de 10 chiffres",
@@ -49,16 +58,20 @@ class Eleve
     private ?string $tel = null;
 
     #[ORM\Column(length: 30)]
+    #[Groups('api')]
     #[Assert\Email(message:"Veuillez entre une adresse mail valide.")]
     private ?string $mail = null;
 
     #[ORM\OneToMany(mappedBy: 'eleve', targetEntity: Inscription::class)]
+    #[Groups('api')]
     private Collection $inscriptions;
 
     #[ORM\OneToMany(mappedBy: 'eleve', targetEntity: ContratPret::class)]
+    #[Groups('api')]
     private Collection $contratprets;
 
     #[ORM\ManyToMany(targetEntity: Responsable::class, inversedBy: 'eleves')]
+    #[Groups('api')]
     private Collection $responsables;
 
 

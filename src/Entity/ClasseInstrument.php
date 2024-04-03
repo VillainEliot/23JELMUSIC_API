@@ -6,6 +6,7 @@ use App\Repository\ClasseInstrumentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ClasseInstrumentRepository::class)]
 class ClasseInstrument
@@ -13,12 +14,15 @@ class ClasseInstrument
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('api')]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups('api')]
     private ?string $libelle = null;
 
     #[ORM\OneToMany(mappedBy: 'classe', targetEntity: TypeInstrument::class)]
+    #[Groups('api')]
     private Collection $typeInstruments;
 
     public function __construct()

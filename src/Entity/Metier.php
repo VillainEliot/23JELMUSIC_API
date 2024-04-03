@@ -6,6 +6,7 @@ use App\Repository\MetierRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: MetierRepository::class)]
 class Metier
@@ -13,12 +14,15 @@ class Metier
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('api')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('api')]
     private ?string $libelle = null;
 
     #[ORM\ManyToMany(targetEntity: Professionnel::class, mappedBy: 'metier')]
+    #[Groups('api')]
     private Collection $professionnels;
 
     public function __construct()

@@ -3,13 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Instrument;
-use App\Form\InstrumentModifierType;
-use App\Form\InstrumentAjouterType;
+use App\Entity\Marque;
+use App\Entity\TypeInstrument;
+use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-
-
+use Symfony\Component\Serializer\SerializerInterface;
 
 
 class InstrumentController extends AbstractController
@@ -22,76 +23,140 @@ class InstrumentController extends AbstractController
 //        ]);
 //    }
 
-    public function consulterInstrument(ManagerRegistry $doctrine , int $id){
+    public function consulterInstrument(ManagerRegistry $doctrine , int $id, SerializerInterface $serializer): JsonResponse
+    {
 
         $instrument = $doctrine->getRepository(Instrument::class)->find($id);
 
         if(!$instrument){
-            throw $this->createNotFoundException('Aucun etudiant trouvé avec le numéro '.$id);
+            return new JsonResponse(['error'=> true, 'message'=> 'L\'instrument ne peut pas être consulté puisqu\'il n\'existe pas.']);
         }
 
-        //return new Response('Etudiant : '.$etudiant->getNom());
-        return $this->render('instrument/consulter.html.twig', [
-            'instrument' => $instrument,
-            ]);
+        $serializerController = new Serializer($serializer);
+        $ignAttr = ['instrument', 'instruments', 'cours', 'inscriptions', 'typeInstruments'];
+        return $serializerController->serializeObject($instrument, $ignAttr);
+//        return $this->render('instrument/consulter.html.twig', [
+//            'instrument' => $instrument,
+//            ]);
     }
 
-    public function listerInstrument(ManagerRegistry $doctrine){
+    public function listerInstrument(ManagerRegistry $doctrine, SerializerInterface $serializer): JsonResponse
+    {
         $repository = $doctrine->getRepository(Instrument::class);
 
         $instruments = $repository->findAll();
-        return $this->render('instrument/lister.html.twig', ['pInstruments' => $instruments,]);
+
+        $serializerController = new Serializer($serializer);
+        $ignAttr = ['instrument', 'instruments', 'cours', 'inscriptions', 'typeInstruments'];
+        return $serializerController->serializeObject($instruments, $ignAttr);
+
+//        return $this->render('instrument/lister.html.twig', ['pInstruments' => $instruments,]);
     }
 
-    public function ajouterInstrument(ManagerRegistry $doctrine,Request $request){
+    public function ajouterInstrument(ManagerRegistry $doctrine, Request $request,SerializerInterface $serializer): JsonResponse
+    {
+        // récupération des données
+        $donnees = [
+            'nom'=> $request->get('nom'),
+            'num_serie'=> $request->get('num_serie'),
+            'date_achat'=> $request->get('date_achat'),
+            'prix_achat'=> $request->get('prix_achat'),
+            'marque_id'=> $request->get('marque_id'),
+            'type_id'=> $request->get('type_id'),
+            'utilisation'=> $request->get('utilisation'),
+            'cheminImage'=> $request->get('cheminImage'),
+        ];
+        // Création et set les données
         $instrument = new Instrument();
-        $form = $this->createForm(InstrumentAjouterType::class, $instrument);
-        $form->handleRequest($request);
+        $instrument->setNom($donnees['nom']);
+        $instrument->setNumSerie($donnees['num_serie']);
+        $dateAchat = new DateTimeImmutable($donnees['date_achat']);
+        $instrument->setDateAchat($dateAchat);
+        $instrument->setPrixAchat($donnees['prix_achat']);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        $repository = $doctrine->getRepository(Marque::class);
+        $marque = $repository->find($donnees['marque_id']);
+        $instrument->setMarque($marque);
 
-            $instrument = $form->getData();
+        $repository = $doctrine->getRepository(TypeInstrument::class);
+        $type = $repository->find($donnees['type_id']);
+        $instrument->setType($type);
+
+        $instrument->setUtilisation($donnees['utilisation']);
+        $instrument->setCheminImage($donnees['cheminImage']);
+
+        // insertion en base
+        $entityManager = $doctrine->getManager();
+        $entityManager->persist($instrument);
+        $entityManager->flush();
+
+        $serializerController = new Serializer($serializer);
+        $ignAttr = ['instrument', 'instruments', 'cours', 'inscriptions', 'typeInstruments'];
+        return $serializerController->serializeObject($instrument, $ignAttr);
+    }
+
+    public function modifierInstrument(ManagerRegistry $doctrine, $id, Request $request, SerializerInterface $serializer): JsonResponse
+    {
+
+        $instrument = $doctrine->getRepository(Instrument::class)->find($id);
+
+        if (!$instrument) {
+            return new JsonResponse(['error'=> true, 'message'=> 'L\'instrument ne peut pas être modifié puisqu\'il n\'existe pas.']);
+        }else{
+
+            // récupération des données
+            $donnees = [
+                'nom'=> $request->get('nom'),
+                'num_serie'=> $request->get('num_serie'),
+                'date_achat'=> $request->get('date_achat'),
+                'prix_achat'=> $request->get('prix_achat'),
+                'marque_id'=> $request->get('marque_id'),
+                'type_id'=> $request->get('type_id'),
+                'utilisation'=> $request->get('utilisation'),
+                'cheminImage'=> $request->get('cheminImage'),
+            ];
+            // Création et set les données
+            $instrument->setNom($donnees['nom']);
+            $instrument->setNumSerie($donnees['num_serie']);
+            $dateAchat = new DateTimeImmutable($donnees['date_achat']);
+            $instrument->setDateAchat($dateAchat);
+            $instrument->setPrixAchat($donnees['prix_achat']);
+
+            $repository = $doctrine->getRepository(Marque::class);
+            $marque = $repository->find($donnees['marque_id']);
+            $instrument->setMarque($marque);
+
+            $repository = $doctrine->getRepository(TypeInstrument::class);
+            $type = $repository->find($donnees['type_id']);
+            $instrument->setType($type);
+
+            $instrument->setUtilisation($donnees['utilisation']);
+            $instrument->setCheminImage($donnees['cheminImage']);
 
             $entityManager = $doctrine->getManager();
             $entityManager->persist($instrument);
             $entityManager->flush();
 
-            return $this->render('instrument/consulter.html.twig', ['instrument' => $instrument,]);
-        } else {
-            return $this->render('instrument/ajouter.html.twig', array('form' => $form->createView(),));
+            $serializerController = new Serializer($serializer);
+            $ignAttr = ['instrument', 'instruments', 'cours', 'inscriptions'];
+            return $serializerController->serializeObject($instrument, $ignAttr);
         }
     }
 
-    public function modifierInstrument(ManagerRegistry $doctrine, $id, Request $request){
-
-        $instrument = $doctrine->getRepository(Instrument::class)->find($id);
+    public function supprimerInstrument(ManagerRegistry $doctrine, $id): JsonResponse
+    {
 
         $repository = $doctrine->getRepository(Instrument::class);
-        $instruments = $repository->findAll();
+        $instrument = $repository->find($id);
 
         if (!$instrument) {
-            throw $this->createNotFoundException('Aucun etudiant trouvé avec le numéro '.$id);
+            return new JsonResponse(['error'=> true, 'message'=> 'L\'instrument ne peut pas être supprimé puisqu\'il n\'existe pas.']);
+        }else {
+            $entityManager = $doctrine->getManager();
+            $entityManager->remove($instrument);
+            $entityManager->flush();
+            return new JsonResponse(['error'=> false, 'message'=> 'Instrument bien supprimé.']);
         }
-        else
-        {
-            $form = $this->createForm(InstrumentModifierType::class, $instrument);
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-
-                $instrument = $form->getData();
-                $entityManager = $doctrine->getManager();
-                $entityManager->persist($instrument);
-                $entityManager->flush();
-                return $this->render('instrument/consulter.html.twig', ['instrument' => $instrument, 'pInstruments' => $instruments]);
-            }
-            else{
-                return $this->render('instrument/modifier.html.twig', array('form' => $form->createView(), 'instrument' => $instrument,));
-            }
-        }
-    }
-
-    public function supprimerInstrument(){
 
     }
 

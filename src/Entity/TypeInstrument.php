@@ -6,6 +6,7 @@ use App\Repository\TypeInstrumentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TypeInstrumentRepository::class)]
 class TypeInstrument
@@ -13,19 +14,24 @@ class TypeInstrument
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('api')]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups('api')]
     private ?string $libelle = null;
 
     #[ORM\ManyToOne(inversedBy: 'typeInstruments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('api')]
     private ?ClasseInstrument $classe = null;
 
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: Instrument::class)]
+    #[Groups('api')]
     private Collection $instruments;
 
     #[ORM\OneToMany(mappedBy: 'typeInstruments', targetEntity: Cours::class)]
+    #[Groups('api')]
     private Collection $cours;
 
     public function __construct()

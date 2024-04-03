@@ -6,6 +6,7 @@ use App\Repository\MarqueRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: MarqueRepository::class)]
 class Marque
@@ -13,12 +14,15 @@ class Marque
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('api')]
     private ?int $id = null;
 
     #[ORM\Column(length: 70)]
+    #[Groups('api')]
     private ?string $libelle = null;
 
     #[ORM\OneToMany(mappedBy: 'marque', targetEntity: Instrument::class)]
+    #[Groups('api')]
     private Collection $instruments;
 
     public function __construct()

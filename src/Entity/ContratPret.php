@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ContratPretRepository::class)]
@@ -15,9 +16,11 @@ class ContratPret
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('api')]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups('api')]
     #[Assert\Expression(
         "this.getDateFin() === null or this.getDateDebut() < this.getDateFin()",
         message: "La date de début ne peut pas être supérieure à la date de fin"
@@ -25,6 +28,7 @@ class ContratPret
     private ?\DateTimeInterface $dateDebut = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups('api')]
     #[Assert\Expression(
         "this.getDateDebut() === null or this.getDateFin() === null or this.getDateDebut() < this.getDateFin()",
         message: "La date de fin ne peut pas être antérieure à la date de début"
@@ -32,21 +36,27 @@ class ContratPret
     private ?\DateTimeInterface $dateFin = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('api')]
     private ?string $attestationAssurance = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('api')]
     private ?string $etatDetailleDebut = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('api')]
     private ?string $etatDetailleRetour = null;
 
     #[ORM\ManyToOne(inversedBy: 'contratprets')]
+    #[Groups('api')]
     private ?Eleve $eleve = null;
 
     #[ORM\ManyToOne(inversedBy: 'contratPrets')]
+    #[Groups('api')]
     private ?Instrument $instrument = null;
 
     #[ORM\OneToMany(mappedBy: 'contratPret', targetEntity: InterPret::class)]
+    #[Groups('api')]
     private Collection $interPrets;
 
     public function __construct()
