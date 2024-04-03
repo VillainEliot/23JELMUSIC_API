@@ -10,6 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class CoursController extends AbstractController
 {
@@ -22,8 +23,9 @@ class CoursController extends AbstractController
     }
 
     //#[Route('/cours/lister', name: 'coursLister')]
-    public function listerCours(ManagerRegistry $doctrine): Response
+    public function listerCours(ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {
+
         $repository = $doctrine->getRepository(Cours::class);
         $cours = $repository->findAll();
 
@@ -48,15 +50,19 @@ class CoursController extends AbstractController
             $countByTypeInstrument[$typeInstruments] = ($countByTypeInstrument[$typeInstruments] ?? 0) + 1;
         }
 
-        return $this->render('cours/lister.html.twig', [
-            'pCours' => $cours,
-            'countByTypeInstrument' => $countByTypeInstrument,
-        ]);
+        $serializerController = new Serializer($serializer);
+        $ignAttr = ['cours', 'instrument', 'instruments', 'contratprets', 'eleves'];
+        return $serializerController->serializeObject($cours, $ignAttr);
+
+//        return $this->render('cours/lister.html.twig', [
+//            'pCours' => $cours,
+//            'countByTypeInstrument' => $countByTypeInstrument,
+//        ]);
     }
 
 
     //#[Route('/cours/consulter/{id}', name: 'coursConsulter')]
-    public function consulterCours(ManagerRegistry $doctrine, int $id){
+    public function consulterCours(ManagerRegistry $doctrine, int $id, SerializerInterface $serializer){
 
         $cours= $doctrine->getRepository(Cours::class)->find($id);
 
@@ -68,10 +74,14 @@ class CoursController extends AbstractController
 
         $eleveInscrits = $cours->getInscriptions();
 
+        $serializerController = new Serializer($serializer);
+        $ignAttr = ['cours', 'instrument', 'instruments', 'contratprets', 'eleves'];
+        return $serializerController->serializeObject($cours, $ignAttr);
+
         //return new Response('cours : '.$cours->getLibelle());
-        return $this->render('cours/consulter.html.twig', [
-            'cours' => $cours,
-            'eleveInscrits' => $eleveInscrits,]);
+//        return $this->render('cours/consulter.html.twig', [
+//            'cours' => $cours,
+//            'eleveInscrits' => $eleveInscrits,]);
     }
 
     //#[Route('/cours/ajouter', name: 'coursAjouter')]
