@@ -21,22 +21,27 @@ deconnexion:
 instrumentConsulter:
     path: /instrument/consulter/{id}
     controller: \App\Controller\InstrumentController::consulterInstrument
+    methods: GET
 
 instrumentLister:
     path: /instrument/lister
     controller: App\Controller\InstrumentController::listerInstrument
+    methods: GET
 
 instrumentAjouter:
     path: /instrument/ajouter
     controller: App\Controller\InstrumentController::ajouterInstrument
+    methods: PUT
 
 InstrumentModifier:
     path: /instrument/modifier/{id}
     controller: App\Controller\InstrumentController::modifierInstrument
+    methods: POST
 
 InstrumentSupprimer:
     path: /instrument/supprimer/{id}
     controller: App\Controller\InstrumentController::supprimerInstrument
+    methods: DELETE
 
 app_cours:
     path: /cours
@@ -65,22 +70,27 @@ CoursSupprimer:
 ContratPretlister:
     path: /contratPret/lister
     controller: App\Controller\ContratPretController::listerContratPret
+    methods: GET
 
 ContratPretConsulter:
     path: /contratPret/consulter/{id}
     controller: App\Controller\ContratPretController::consulterContratPret
+    methods: GET
 
 ContratPretAjouter:
     path: /contratPret/ajouter
     controller: App\Controller\ContratPretController::ajouterContratPret
+    methods: PUT
 
 ContratPretModifier:
     path: /contratPret/modifier/{id}
     controller: App\Controller\ContratPretController::modifierContratPret
+    methods: POST
 
 ContratPretSupprimer:
     path: /contratPret/supprimer/{id}
     controller: App\Controller\ContratPretController::supprimerContratPret
+    methods: DELETE
 
 Interventionlister:
     path: /intervention/lister

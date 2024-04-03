@@ -33,7 +33,7 @@ class ContratPretController extends AbstractController
         $contratPrets= $repository->findAll();
 
         $serializerController = new Serializer($serializer);
-        $ignAttr = ['contratPrets', 'contratPret','cours', 'intervention' => 'instruments'];
+        $ignAttr = ['contratPrets', 'contratPret','cours', 'intervention' => 'instruments', 'typeInstruments', 'professionnel' => 'interventions', 'eleves',];
         return $serializerController->serializeObject($contratPrets, $ignAttr);
 //        return $this->render('contratPret/lister.html.twig', [
 //            'pContratPret' => $contratPrets,]);
@@ -45,13 +45,11 @@ class ContratPretController extends AbstractController
         $contratPret= $doctrine->getRepository(ContratPret::class)->find($id);
 
         if (!$contratPret) {
-            throw $this->createNotFoundException(
-                'Aucun ContratPret trouvé avec le numéro '.$id
-            );
+            return new JsonResponse(['error'=> true, 'message'=> 'Le contrat ne peut pas être consulté puisqu\'il n\'existe pas.']);
         }
 
         $serializerController = new Serializer($serializer);
-        $ignAttr = ['contratPrets', 'contratPret','cours', 'intervention' => 'instruments'];
+        $ignAttr = ['contratPrets', 'contratPret','cours', 'intervention' => 'instruments', 'typeInstruments', 'professionnel' => 'interventions', 'eleves',];
         return $serializerController->serializeObject($contratPret, $ignAttr);
 
         //return new Response('ContratPret : '.$ContratPret->getNom());
@@ -93,7 +91,7 @@ class ContratPretController extends AbstractController
         $entityManager->flush();
 
         $serializerController = new Serializer($serializer);
-        $ignAttr = ['contratPrets', 'contratPret','cours', 'intervention' => 'instruments'];
+        $ignAttr = ['contratPrets', 'contratPret','cours', 'intervention' => 'instruments', 'typeInstruments', 'professionnel' => 'interventions', 'eleves',];
         return $serializerController->serializeObject($contratPret, $ignAttr);
     }
 
@@ -102,7 +100,7 @@ class ContratPretController extends AbstractController
         $contratPret = $doctrine->getRepository(ContratPret::class)->find($id);
 
         if (!$contratPret) {
-            return new JsonResponse(['error'=> true, 'message'=> 'Le contrat ne peut pas être modifié puisqu\'il n\'existe pas.']);
+            return new JsonResponse(['error'=> true, 'message'=> 'Le contrat ne peut pas être modifié puisqu\'il n\'existe pas.'], 404);
         }else{
             $donnees = [
                 'dateDebut'=> $request->get('dateDebut'),
@@ -136,7 +134,7 @@ class ContratPretController extends AbstractController
             $entityManager->flush();
 
             $serializerController = new Serializer($serializer);
-            $ignAttr = ['contratPrets', 'contratPret','cours', 'intervention' => 'instruments'];
+            $ignAttr = ['contratPrets', 'contratPret','cours', 'intervention' => 'instruments', 'typeInstruments', 'professionnel' => 'interventions', 'eleves',];
             return $serializerController->serializeObject($contratPret, $ignAttr);
         }
     }
