@@ -136,18 +136,27 @@ ProfessionnelModifier :
 eleveLister:
     path: /eleve/lister
     controller: App\Controller\EleveController::listerEleve
+    methods: GET
 
 eleveConsulter:
     path: /eleve/consulter/{id}
     controller: App\Controller\EleveController::consulterEleve
+    methods: GET
 
 eleveAjouter:
     path: /eleve/ajouter
     controller: App\Controller\EleveController::ajouterEleve
+    methods: PUT
 
 eleveModifier:
     path: /eleve/modifier/{id}
     controller: App\Controller\EleveController::modifierEleve
+    methods: POST
+
+eleveSupprimer:
+    path: /eleve/supprimer/{id}
+    controller: App\Controller\EleveController::supprimerEleve
+    methods: DELETE
 
 inscriptionLister:
     path: /inscription/lister
