@@ -67,9 +67,10 @@ class EleveController extends AbstractController
             'tel'=> $request->get('tel'),
             'mail'=> $request->get('mail'),
         ];
+        //Création de l'objet
         $eleve = new Eleve();
 
-
+        // Set les données
         $eleve->setNom($donnees['nom']);
         $eleve->setPrenom($donnees['prenom']);
         $eleve->setNumRue($donnees['num_rue']);
@@ -92,29 +93,63 @@ class EleveController extends AbstractController
 //        ]);
     }
 
-    public function modifierEleve(ManagerRegistry $doctrine, $id, Request $request){
+    public function modifierEleve(ManagerRegistry $doctrine, $id, Request $request, SerializerInterface $serializer){
 
         $eleve = $doctrine->getRepository(Eleve::class)->find($id);
 
         if (!$eleve) {
-            throw $this->createNotFoundException('Aucune eleve trouvé avec le numéro '.$id);
+            return new JsonResponse(['error'=> true, 'message'=> 'L\'élève ne peut pas être modifié puisqu\'il n\'existe pas.']);
         }
         else
         {
-            $form = $this->createForm(EleveModifierType::class, $eleve);
-            $form->handleRequest($request);
+            // récupération des données
+            $donnees = [
+                'nom'=> $request->get('nom'),
+                'prenom'=> $request->get('prenom'),
+                'num_rue'=> $request->get('num_rue'),
+                'rue'=> $request->get('rue'),
+                'copos'=> $request->get('copos'),
+                'ville'=> $request->get('ville'),
+                'tel'=> $request->get('tel'),
+                'mail'=> $request->get('mail'),
+            ];
 
-            if ($form->isSubmitted() && $form->isValid()) {
+            // Set les données
+            $eleve->setNom($donnees['nom']);
+            $eleve->setPrenom($donnees['prenom']);
+            $eleve->setNumRue($donnees['num_rue']);
+            $eleve->setRue($donnees['rue']);
+            $eleve->setCopos($donnees['copos']);
+            $eleve->setVille($donnees['ville']);
+            $eleve->setTel($donnees['tel']);
+            $eleve->setMail($donnees['mail']);
 
-                $eleve = $form->getData();
-                $entityManager = $doctrine->getManager();
-                $entityManager->persist($eleve);
-                $entityManager->flush();
-                return $this->redirectToRoute("eleveLister");
-            }
-            else{
-                return $this->render('eleve/ajouter.html.twig', array('form' => $form->createView(),));
-            }
+            // insertion en base
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($eleve);
+            $entityManager->flush();
+
+            $serializerController = new Serializer($serializer);
+            $ignAttr = ['eleves', 'eleve', 'cours','instruments', 'interventions', 'typeInstruments', 'interPrets', 'user'];
+            return $serializerController->serializeObject($eleve, $ignAttr);
         }
     }
+
+    public function supprimerEleve(ManagerRegistry $doctrine, $id): JsonResponse
+    {
+
+        $repository = $doctrine->getRepository(Eleve::class);
+        $eleve = $repository->find($id);
+
+        if (!$eleve) {
+            return new JsonResponse(['error'=> true, 'message'=> 'L\'élève ne peut pas être supprimé puisqu\'il n\'existe pas.']);
+        }else {
+            $entityManager = $doctrine->getManager();
+            $entityManager->remove($eleve);
+            $entityManager->flush();
+            return new JsonResponse(['error'=> false, 'message'=> 'Élève bien supprimé.']);
+        }
+
+    }
+
 }
