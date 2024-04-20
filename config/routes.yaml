@@ -47,6 +47,12 @@ app_cours:
     path: /cours
     controller: App\Controller\CoursController::index
 
+
+professeurLister:
+    path: /professeur/lister
+    controller: App\Controller\ProfesseurController::listerProfesseur
+    methods: GET
+
 coursConsulter:
     path: /cours/consulter/{id}
     controller: App\Controller\CoursController::consulterCours
