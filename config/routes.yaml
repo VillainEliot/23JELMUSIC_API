@@ -53,6 +53,10 @@ professeurLister:
     controller: App\Controller\ProfesseurController::listerProfesseur
     methods: GET
 
+TypeInstrumentLister:
+    path: /typeinstruments/lister
+    controller: App\Controller\TypeInstrumentController::listerInstruments
+    methods: GET
 
 joursLister:
     path: /jours/lister
