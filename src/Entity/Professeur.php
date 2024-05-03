@@ -50,7 +50,7 @@ class Professeur
     private ?string $mail = null;
 
     #[ORM\OneToMany(mappedBy: 'professeur', targetEntity: Cours::class)]
-    #[Groups('api')]
+//    #[Groups('api')]
     private Collection $cours;
 
     public function __construct()

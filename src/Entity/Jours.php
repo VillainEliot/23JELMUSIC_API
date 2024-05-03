@@ -22,7 +22,7 @@ class Jours
     private ?string $libelle = null;
 
     #[ORM\OneToMany(mappedBy: 'jours', targetEntity: Cours::class)]
-    #[Groups('api')]
+//    #[Groups('api')]
     private Collection $cours;
 
     public function __construct()
