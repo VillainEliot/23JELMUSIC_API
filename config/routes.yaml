@@ -177,15 +177,28 @@ eleveSupprimer:
 inscriptionLister:
     path: /inscription/lister
     controller: App\Controller\InscriptionController::listerInscription
+    methods: GET
+
+inscriptionListerByCours:
+    path: /inscription/lister/{id}
+    controller: App\Controller\InscriptionController::listerInscriptionByCours
+    methods: GET
 
 inscriptionConsulter:
     path: /inscription/consulter/{id}
     controller: App\Controller\InscriptionController::consulterInscription
+    methods: GET
 
 inscriptionAjouter:
     path: /inscription/ajouter
     controller: App\Controller\InscriptionController::ajouterInscription
+    methods: PUT
 
 inscriptionModifier:
     path: /inscription/modifier/{id}
     controller: App\Controller\InscriptionController::modifierInscription
+
+inscriptionSupprimer:
+    path: /inscription/supprimer/{id}
+    controller: App\Controller\InscriptionController::supprimerInscription
+    methods: DELETE
