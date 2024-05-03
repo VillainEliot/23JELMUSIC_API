@@ -2,14 +2,18 @@
 
 namespace App\Controller;
 
+use App\Entity\Cours;
+use App\Entity\Eleve;
 use App\Entity\Inscription;
 use App\Form\InscriptionModifierType;
 use App\Form\InscriptionType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class InscriptionController extends AbstractController
 {
@@ -21,49 +25,74 @@ class InscriptionController extends AbstractController
         ]);
     }
 
-    public function listerInscription(ManagerRegistry $doctrine){
+    public function listerInscription(ManagerRegistry $doctrine, SerializerInterface $serializer){
 
         $repository = $doctrine->getRepository(Inscription::class);
 
         $inscriptions= $repository->findAll();
-        return $this->render('inscription/lister.html.twig', [
-            'pInscription' => $inscriptions,]);
+        $serializerController = new Serializer($serializer);
+        $ignAttr = ['inscriptions', 'inscription', 'contratpret', 'contratprets', 'typeInstruments', 'typeCours'];
+        return $serializerController->serializeObject($inscriptions, $ignAttr);
+
 
     }
 
-    public function consulterInscription(ManagerRegistry $doctrine, int $id){
+    public function listerInscriptionByCours(ManagerRegistry $doctrine, SerializerInterface $serializer, int $id){
+
+        $repository = $doctrine->getRepository(Inscription::class);
+
+        $inscriptions= $repository->findBy(['cours' => $id]);
+        $serializerController = new Serializer($serializer);
+        $ignAttr = ['inscriptions', 'inscription', 'contratpret', 'contratprets', 'typeInstruments', 'typeCours'];
+        return $serializerController->serializeObject($inscriptions, $ignAttr);
+
+
+    }
+
+    public function consulterInscription(ManagerRegistry $doctrine, SerializerInterface $serializer, int $id){
 
         $inscription = $doctrine->getRepository(Inscription::class)->find($id);
 
         if (!$inscription) {
-            throw $this->createNotFoundException(
-                'Aucune inscription trouvé avec le numéro '.$id
-            );
+            return new JsonResponse(['error'=> true, 'message'=> 'L\'inscription ne peut pas être consulté puisqu\'il n\'existe pas.']);
         }
 
-        //return new Response('Inscription : '.$inscription->getNom());
-        return $this->render('inscription/consulter.html.twig', [
-            'inscription' => $inscription,]);
+        $serializerController = new Serializer($serializer);
+        $ignAttr = ['inscriptions', 'inscription', 'contratpret', 'contratprets', 'typeInstruments', 'typeCours'];
+        return $serializerController->serializeObject($inscription, $ignAttr);
     }
 
-    public function ajouterInscription(Request $request, EntityManagerInterface $entityManager): Response
+    public function ajouterInscription(Request $request, ManagerRegistry $doctrine, SerializerInterface $serializer): Response
     {
+        $error = false;
+        // récupération des données
+        $donnees = [
+            'coursIdToInscription'=> $request->get('coursIdToInscription'),
+            'eleveIdToInscription'=> $request->get('eleveIdToInscription'),
+        ];
+        $eleve = $doctrine->getRepository(Eleve::class)->find($donnees['eleveIdToInscription']);
+        $cours = $doctrine->getRepository(Cours::class)->find($donnees['coursIdToInscription']);
+        if ($eleve == null or $cours == null){
+            $error = true;
+        }
+        // Création et set les données
         $inscription = new Inscription();
-        $form = $this->createForm(InscriptionType::class, $inscription);
+        $inscription->setCours($cours);
+        $inscription->setEleve($eleve);
+        $inscription->setDateInscription(new \DateTime());
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($error){
+            return new JsonResponse(['error'=> true, 'message'=> 'Le cours ou l\'élève n\'existe pas']);
+        }else{
+            // insertion en base
+            $entityManager = $doctrine->getManager();
             $entityManager->persist($inscription);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Inscription créé avec succès!');
-            return $this->redirectToRoute('inscriptionLister');
+            $serializerController = new Serializer($serializer);
+            $ignAttr = ['inscriptions', 'inscription', 'contratpret', 'contratprets', 'typeInstruments', 'typeCours'];
+            return $serializerController->serializeObject($inscription, $ignAttr);
         }
-
-        return $this->render('inscription/ajouter.html.twig', [
-            'form' => $form->createView(),
-        ]);
     }
 
     public function modifierInscription(ManagerRegistry $doctrine, $id, Request $request){
@@ -90,5 +119,22 @@ class InscriptionController extends AbstractController
                 return $this->render('inscription/ajouter.html.twig', array('form' => $form->createView(),));
             }
         }
+    }
+
+    public function supprimerInscription(ManagerRegistry $doctrine, $id): JsonResponse
+    {
+
+        $repository = $doctrine->getRepository(Inscription::class);
+        $inscription = $repository->find($id);
+
+        if (!$inscription) {
+            return new JsonResponse(['error'=> true, 'message'=> 'L\'inscription ne peut pas être supprimé puisqu\'il n\'existe pas.']);
+        }else {
+            $entityManager = $doctrine->getManager();
+            $entityManager->remove($inscription);
+            $entityManager->flush();
+            return new JsonResponse(['error'=> false, 'message'=> 'Inscription bien supprimé.']);
+        }
+
     }
 }
