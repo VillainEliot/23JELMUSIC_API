@@ -62,15 +62,15 @@ class Eleve
     #[Assert\Email(message:"Veuillez entre une adresse mail valide.")]
     private ?string $mail = null;
 
-    #[ORM\OneToMany(mappedBy: 'eleve', targetEntity: Inscription::class)]
+    #[ORM\OneToMany(mappedBy: 'eleve', targetEntity: Inscription::class, cascade: ['persist', 'remove'])]
     #[Groups('api')]
     private Collection $inscriptions;
 
-    #[ORM\OneToMany(mappedBy: 'eleve', targetEntity: ContratPret::class)]
+    #[ORM\OneToMany(mappedBy: 'eleve', targetEntity: ContratPret::class, cascade: ['persist', 'remove'])]
     #[Groups('api')]
     private Collection $contratprets;
 
-    #[ORM\ManyToMany(targetEntity: Responsable::class, inversedBy: 'eleves')]
+    #[ORM\ManyToMany(targetEntity: Responsable::class, inversedBy: 'eleves', cascade: ['persist', 'remove'])]
     #[Groups('api')]
     private Collection $responsables;
 

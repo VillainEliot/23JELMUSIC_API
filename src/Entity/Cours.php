@@ -80,7 +80,7 @@ class Cours
     #[Groups('api')]
     private ?Professeur $professeur = null;
 
-    #[ORM\OneToMany(mappedBy: 'cours', targetEntity: Inscription::class)]
+    #[ORM\OneToMany(mappedBy: 'cours', targetEntity: Inscription::class, cascade: ['persist', 'remove'])]
     #[Groups('api')]
     private Collection $inscriptions;
 
