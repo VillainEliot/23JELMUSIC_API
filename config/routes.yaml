@@ -58,6 +58,11 @@ TypeInstrumentLister:
     controller: App\Controller\TypeInstrumentController::listerInstruments
     methods: GET
 
+MarqueLister:
+    path: /marque/lister
+    controller: App\Controller\MarqueController::listerMarques
+    methods: GET
+
 joursLister:
     path: /jours/lister
     controller: App\Controller\JourController::listerJours
