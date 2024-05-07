@@ -47,6 +47,22 @@ app_cours:
     path: /cours
     controller: App\Controller\CoursController::index
 
+
+professeurLister:
+    path: /professeur/lister
+    controller: App\Controller\ProfesseurController::listerProfesseur
+    methods: GET
+
+TypeInstrumentLister:
+    path: /typeinstruments/lister
+    controller: App\Controller\TypeInstrumentController::listerInstruments
+    methods: GET
+
+joursLister:
+    path: /jours/lister
+    controller: App\Controller\JourController::listerJours
+    methods: GET
+
 coursConsulter:
     path: /cours/consulter/{id}
     controller: App\Controller\CoursController::consulterCours
@@ -136,31 +152,53 @@ ProfessionnelModifier :
 eleveLister:
     path: /eleve/lister
     controller: App\Controller\EleveController::listerEleve
+    methods: GET
 
 eleveConsulter:
     path: /eleve/consulter/{id}
     controller: App\Controller\EleveController::consulterEleve
+    methods: GET
 
 eleveAjouter:
     path: /eleve/ajouter
     controller: App\Controller\EleveController::ajouterEleve
+    methods: PUT
 
 eleveModifier:
     path: /eleve/modifier/{id}
     controller: App\Controller\EleveController::modifierEleve
+    methods: POST
+
+eleveSupprimer:
+    path: /eleve/supprimer/{id}
+    controller: App\Controller\EleveController::supprimerEleve
+    methods: DELETE
 
 inscriptionLister:
     path: /inscription/lister
     controller: App\Controller\InscriptionController::listerInscription
+    methods: GET
+
+inscriptionListerByCours:
+    path: /inscription/lister/{id}
+    controller: App\Controller\InscriptionController::listerInscriptionByCours
+    methods: GET
 
 inscriptionConsulter:
     path: /inscription/consulter/{id}
     controller: App\Controller\InscriptionController::consulterInscription
+    methods: GET
 
 inscriptionAjouter:
     path: /inscription/ajouter
     controller: App\Controller\InscriptionController::ajouterInscription
+    methods: PUT
 
 inscriptionModifier:
     path: /inscription/modifier/{id}
     controller: App\Controller\InscriptionController::modifierInscription
+
+inscriptionSupprimer:
+    path: /inscription/supprimer/{id}
+    controller: App\Controller\InscriptionController::supprimerInscription
+    methods: DELETE
